@@ -6,17 +6,17 @@ Each pattern directory holds a `README.md` explaining the pattern itself, a `PRO
 
 ## Patterns
 
-| #  | Pattern                                                                                 | Problems |
-|-:--|-:---------------------------------------------------------------------------------------|-:--------|
-| 00 | [Warmup](./00-warmpup/README.md)                                                        | 8        |
-| 01 | [Two Pointers](./01-two-pointers/README.md)                                             | 12       |
-| 02 | [Fast and Slow Pointers](./02-fast-and-slow-pointers/README.md)                         | 9        |
-| 03 | [Sliding Window](./03-sliding-window/README.md)                                         | 13       |
-| 04 | [Merge Intervals](./04-merge-intervals/README.md)                                       | 8        |
-| 05 | [Cyclic Sort](./05-cyclic-sort/README.md)                                               | 8        |
-| 06 | [In-Place Reversal of a Linked List](./06-in-place-reversal-of-a-linked-list/README.md) | 7        |
-| 07 | [Stacks](./07-stacks/README.md)                                                         | 7        |
-| 15 | [Two Heaps](./15-two-heaps/README.md)                                                   | 2        |
+| #   | Pattern                                                                                 | Problems |
+| --- | --------------------------------------------------------------------------------------- | -------- |
+| 00  | [Warmup](./00-warmpup/README.md)                                                        | 8        |
+| 01  | [Two Pointers](./01-two-pointers/README.md)                                             | 12       |
+| 02  | [Fast and Slow Pointers](./02-fast-and-slow-pointers/README.md)                         | 9        |
+| 03  | [Sliding Window](./03-sliding-window/README.md)                                         | 13       |
+| 04  | [Merge Intervals](./04-merge-intervals/README.md)                                       | 8        |
+| 05  | [Cyclic Sort](./05-cyclic-sort/README.md)                                               | 8        |
+| 06  | [In-Place Reversal of a Linked List](./06-in-place-reversal-of-a-linked-list/README.md) | 7        |
+| 07  | [Stacks](./07-stacks/README.md)                                                         | 7        |
+| 15  | [Two Heaps](./15-two-heaps/README.md)                                                   | 2        |
 
 ## Problem lists
 
