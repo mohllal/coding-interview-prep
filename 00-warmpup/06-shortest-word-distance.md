@@ -1,15 +1,15 @@
 ---
 title: Shortest Word Distance
-difficulty: 🟢 Easy
+difficulty: Easy
+leetcode: https://leetcode.com/problems/shortest-word-distance/
 tags:
   - Array
   - String
-url: https://leetcode.com/problems/shortest-word-distance/
 ---
 
 # Shortest Word Distance
 
-## Problem Description
+## Problem description
 
 Given an array of strings `wordsDict` and two different strings that already exist in the array `word1` and `word2`, return the shortest distance between these two words in the list.
 
@@ -37,18 +37,34 @@ Output: 1
 - `word1` and `word2` are in `wordsDict`.
 - `word1 != word2`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+You do not need every position of both words — only the most recent one of each as you scan.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Each time you see either word, compare against the last index seen for the *other* one and update the best distance. A single pass is enough.
+
+</details>
+
 ## Solution
 
 The approach uses two pointers to track the most recent positions of `word1` and `word2` while traversing the array. Initialize both positions to `-1`. As we iterate, update the corresponding position when we encounter either word. Whenever both positions are valid, compute the absolute difference and update the minimum distance.
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ - Single pass through the array.
-- **Space Complexity:** $O(1)$ - Only constant extra space for tracking positions.
+- Time complexity: $O(n)$ - Single pass through the array.
+- Space complexity: $O(1)$ - Only constant extra space for tracking positions.
 
 ```python
 class Solution:
-    def shortestDistance(self, words: List[str], word1: str, word2: str) -> int:
+    def shortest_distance(self, words: List[str], word1: str, word2: str) -> int:
         word1_index = -1
         word2_index = -1
         distance = float("inf")

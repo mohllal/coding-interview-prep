@@ -148,9 +148,10 @@ Three things change from problem to problem: the **key** you store, the **value*
   - Look up: the same score
 
 Which value to store follows from what you are measuring:
-    - Frequencies count subarray
-    - The earliest index maximizes `j - seen[partner]`, so it gives the longest
-    - The latest index minimizes it, so it gives the shortest.
+
+- Frequencies count subarrays
+- The earliest index maximizes `j - seen[partner]`, so it gives the longest
+- The latest index minimizes it, so it gives the shortest
 
 ## Recognize it when
 

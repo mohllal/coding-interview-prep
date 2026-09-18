@@ -1,16 +1,16 @@
 ---
 title: Valid Anagram
-difficulty: 🟢 Easy
+difficulty: Easy
+leetcode: https://leetcode.com/problems/valid-anagram/
 tags:
   - Hash Table
   - String
   - Sorting
-url: https://leetcode.com/problems/valid-anagram/
 ---
 
 # Valid Anagram
 
-## Problem Description
+## Problem description
 
 Given two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `false` otherwise.
 
@@ -37,20 +37,36 @@ Output: false
 
 **Follow up:** What if the inputs contain Unicode characters? How would you adapt your solution to such a case?
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Two strings are anagrams exactly when they have the same multiset of characters. What does that say about their lengths?
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Count the characters of one string, then spend those counts down while scanning the other. Any count going negative, or anything left over, means no.
+
+</details>
+
 ## Solution
 
 The approach first checks if the strings have equal length (a necessary condition for anagrams). Then it uses a hash map to count character frequencies in both strings. Finally, it verifies that every character appears the same number of times in both strings by comparing the counts bidirectionally.
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ - Linear pass to count characters and compare counts.
-- **Space Complexity:** $O(1)$ - The counter is bounded by 26 lowercase letters.
+- Time complexity: $O(n)$ - Linear pass to count characters and compare counts.
+- Space complexity: $O(1)$ - The counter is bounded by 26 lowercase letters since input strings only contain english alphabet characters.
 
 ```python
 from collections import Counter
 
 class Solution:
-    def isAnagram(self, s: str, t: str) -> bool:
+    def is_anagram(self, s: str, t: str) -> bool:
         if len(s) != len(t):
             return False
 

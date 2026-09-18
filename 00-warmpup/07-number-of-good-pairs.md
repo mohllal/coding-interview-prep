@@ -1,17 +1,17 @@
 ---
 title: Number of Good Pairs
-difficulty: 🟢 Easy
+difficulty: Easy
+leetcode: https://leetcode.com/problems/number-of-good-pairs/
 tags:
   - Array
   - Hash Table
   - Math
   - Counting
-url: https://leetcode.com/problems/number-of-good-pairs/
 ---
 
 # Number of Good Pairs
 
-## Problem Description
+## Problem description
 
 Given an array of integers `nums`, return the number of **good pairs**.
 
@@ -47,18 +47,34 @@ Output: 0
 - `1 <= nums.length <= 100`
 - `1 <= nums[i] <= 100`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+A good pair needs two equal values. If a value appears `c` times, how many pairs does it contribute on its own?
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+That is `c * (c - 1) / 2`. You can also accumulate it incrementally: when you meet a value you have already seen `c` times, it forms `c` new pairs right now.
+
+</details>
+
 ## Solution
 
 The approach uses a hash map to track how many times each number has been seen so far. For each number, if we've seen it `k` times before, it can form `k` new good pairs with the current occurrence. We add this count to our result and increment the counter for that number.
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ - Single pass through the array.
-- **Space Complexity:** $O(n)$ - Hash map to store counts of each unique number.
+- Time complexity: $O(n)$ - Single pass through the array.
+- Space complexity: $O(n)$ - Hash map to store counts of each unique number.
 
 ```python
 class Solution:
-    def numIdenticalPairs(self, nums: List[int]) -> int:
+    def num_identical_pairs(self, nums: List[int]) -> int:
         good_pairs = 0
         counter = {}
 
