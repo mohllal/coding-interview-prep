@@ -1,15 +1,15 @@
 ---
 title: Simplify Path
-difficulty: 🟡 Medium
+difficulty: Medium
+leetcode: https://leetcode.com/problems/simplify-path/
 tags:
   - String
   - Stack
-url: https://leetcode.com/problems/simplify-path/
 ---
 
 # Simplify Path
 
-## Problem Description
+## Problem description
 
 Given an absolute path for a Unix-style file system, which begins with a slash `'/'`, transform this path into its **simplified canonical path**.
 
@@ -64,6 +64,22 @@ Explanation: Going up from root stays at root
 - `path` consists of English letters, digits, period `'.'`, slash `'/'`, or underscore `'_'`
 - `path` is a valid absolute Unix path
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Split on `/` and most of the work becomes deciding what to do with each component. Three of them are special: empty, `.` and `..`.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+`..` has to undo the previous component — the most recently added one. That is a pop, which makes a stack the natural structure.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -78,14 +94,14 @@ A stack naturally handles the parent directory (`..`) operation: push directorie
    - Otherwise: push directory name onto stack
 3. Join stack with `'/'` and prepend `'/'`
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ — process each character once
-- **Space Complexity:** $O(n)$ — stack may hold all directory names
+- Time complexity: $O(n)$ — process each character once
+- Space complexity: $O(n)$ — stack may hold all directory names
 
 ```python
 class Solution:
-    def simplifyPath(self, path: str) -> str:
+    def simplify_path(self, path: str) -> str:
         # Split the path by '/' and remove:
         # - empty parts (caused by '//' or leading '/')
         # - '.' since it represents the current directory
@@ -93,7 +109,7 @@ class Solution:
 
         stack = []
         for part in components:
-            if part == "..":
+            if part == ".." and stack:
                 # ".." means go up one directory
                 # Only pop if there is a directory to go back from
                 if stack:
@@ -102,7 +118,12 @@ class Solution:
                 # Valid directory name, push onto the stack
                 stack.append(part)
 
-        # Rebuild the canonical path from the stack
-        # Always starts with a root '/'
+        # Rebuild the canonical path from the stack.
+        # Prepend '/' to ensure an absolute path.
+        #
+        # This will not produce '//' duplicates because:
+        # - If the stack is empty, returns just '/'
+        # - If the stack has elements, '/'.join(stack) does not start with '/', so single '/' is added.
+   
         return "/" + "/".join(stack)
 ```

@@ -1,15 +1,17 @@
 ---
-title: Valid Parentheses
-difficulty: 🟢 Easy
+title: Balanced Parentheses
+difficulty: Easy
+leetcode_title: Valid Parentheses
+leetcode: https://leetcode.com/problems/valid-parentheses/
 tags:
   - String
   - Stack
-url: https://leetcode.com/problems/valid-parentheses/
+  - Bracket Sequences
 ---
 
-# Valid Parentheses
+# Balanced Parentheses
 
-## Problem Description
+## Problem description
 
 Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.
 
@@ -47,6 +49,22 @@ Output: false
 - `1 <= s.length <= 10⁴`
 - `s` consists of parentheses only `'()[]{}'`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Counting brackets is not enough: `([)]` has equal counts of everything and is still invalid. Order matters.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+The most recently opened bracket must be the first one closed — which is exactly what a stack gives you. Remember to check the stack is empty at the end.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -61,14 +79,14 @@ A stack naturally models the nesting structure of brackets. Push opening bracket
    - If closing: pop and verify it matches
 3. Return true if stack is empty at the end
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ — single pass through the string
-- **Space Complexity:** $O(n)$ — stack may hold all characters in worst case
+- Time complexity: $O(n)$ — single pass through the string
+- Space complexity: $O(n)$ — stack may hold all characters in worst case
 
 ```python
 class Solution:
-    def isValid(self, s: str) -> bool:
+    def is_valid(self, s: str) -> bool:
         stack = []
         matching = {')': '(', '}': '{', ']': '['}
 

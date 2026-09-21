@@ -1,23 +1,24 @@
 ---
-title: Next Greater Element I
-difficulty: 🟢 Easy
+title: Next Greater Element
+difficulty: Easy
+leetcode_title: Next Greater Element I
+leetcode: https://leetcode.com/problems/next-greater-element-i/
 tags:
   - Array
   - Hash Table
   - Stack
   - Monotonic Stack
-url: https://leetcode.com/problems/next-greater-element-i/
 ---
 
-# Next Greater Element I
+# Next Greater Element
 
-## Problem Description
+## Problem description
 
-The **next greater element** of some element `x` in an array is the **first greater** element that is **to the right** of `x` in the same array.
+The next greater element of some element `x` in an array is the **first greater** element that is **to the right** of `x` in the same array.
 
 You are given two **distinct 0-indexed** integer arrays `nums1` and `nums2`, where `nums1` is a subset of `nums2`.
 
-For each `0 <= i < nums1.length`, find the index `j` such that `nums1[i] == nums2[j]` and determine the **next greater element** of `nums2[j]` in `nums2`. If there is no next greater element, then the answer for this query is `-1`.
+For each `0 <= i < nums1.length`, find the index `j` such that `nums1[i] == nums2[j]` and determine the next greater element of `nums2[j]` in `nums2`. If there is no next greater element, then the answer for this query is `-1`.
 
 Return an array `ans` of length `nums1.length` such that `ans[i]` is the next greater element as described above.
 
@@ -48,11 +49,29 @@ Output: [3,-1]
 - All integers in `nums1` and `nums2` are unique
 - All integers of `nums1` also appear in `nums2`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Scanning forward from each element is $O(n^2)$. Notice that once an element has found its answer, it is never needed again.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Keep a stack of elements still waiting for a larger value. When a new value arrives, it resolves everything smaller sitting on top.
+
+</details>
+
 ## Solution
 
 ### Intuition
 
-Use a **monotonic decreasing stack** to efficiently find the next greater element for each number in `nums2`. Process from right to left: the stack maintains candidates that could be "next greater" for elements to the left.
+Instead of searching to the right for every element `(O(n²))`, process `nums2` once using a decreasing monotonic stack to find the next greater element for each number in `nums2` in a single pass.
+
+Process from right to left: the stack maintains candidates that could be "next greater" for elements to the left.
 
 ### Algorithm
 
@@ -63,14 +82,32 @@ Use a **monotonic decreasing stack** to efficiently find the next greater elemen
    - Push current element onto stack
 3. Look up each `nums1` element in the hash map
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n + m)$ — each element pushed/popped at most once
-- **Space Complexity:** $O(n)$ — stack and hash map for `nums2`
+- Time complexity: $O(n + m)$ — each element pushed/popped at most once
+- Space complexity: $O(n)$ — stack and hash map for `nums2`
+
+The nested `while` inside the `for` loop looks like $O(n^2)$, but it is not. Each element enters the stack exactly once (one push per outer iteration) and leaves at most once (one pop, whenever a larger element arrives). The total number of push and pop operations across the entire loop is therefore at most $2n$, regardless of how those operations are distributed.
+
+The worst case concentrates many pops into a single iteration. For `nums2 = [10, 1, 2, 3, 4, 5]`, processing right to left, the first five iterations each push without popping — the stack grows to `[5, 4, 3, 2, 1]`. When `10` is processed, the `while` pops all five elements in one go:
+
+```plaintext
+process 5  →  push 5          stack: [5]
+process 4  →  push 4          stack: [5, 4]
+process 3  →  push 3          stack: [5, 4, 3]
+process 2  →  push 2          stack: [5, 4, 3, 2]
+process 1  →  push 1          stack: [5, 4, 3, 2, 1]
+process 10 →  pop 1,2,3,4,5   stack: []   (5 pops in one while loop)
+              push 10          stack: [10]
+
+total: 6 pushes + 5 pops = 11 operations for n = 6
+```
+
+The pops that cluster on that last step cannot happen again — those elements are gone. The total stays $O(n)$.
 
 ```python
 class Solution:
-    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+    def next_greater_element(self, nums1: List[int], nums2: List[int]) -> List[int]:
         stack = []  # Monotonic decreasing stack
         next_greater = {num: -1 for num in nums2}
 

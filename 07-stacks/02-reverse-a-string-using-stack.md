@@ -1,14 +1,16 @@
 ---
 title: Reverse a String Using Stack
-difficulty: 🟢 Easy
+difficulty: Easy
+leetcode_title: Reverse String
+leetcode: https://leetcode.com/problems/reverse-string/
 tags:
+  - Two Pointers
   - String
-  - Stack
 ---
 
 # Reverse a String Using Stack
 
-## Problem Description
+## Problem description
 
 Given a string, write a function that uses a stack to reverse the string. Return the reversed string.
 
@@ -40,6 +42,22 @@ Output: "!nuf era skcatS"
 - `1 <= s.length <= 10⁵`
 - `s[i]` is a printable ASCII character
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+The last character pushed is the first popped. That property alone does the reversing for you.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Push every character, then pop them all back into a new string. No index arithmetic is needed.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -52,14 +70,14 @@ A stack reverses order naturally: first in, last out. Push all characters onto t
 2. Pop each character and append to result
 3. Join and return
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ — push and pop each character once
-- **Space Complexity:** $O(n)$ — stack holds all characters
+- Time complexity: $O(n)$ — push and pop each character once
+- Space complexity: $O(n)$ — stack holds all characters
 
 ```python
 class Solution:
-    def reverseString(self, s: str) -> str:
+    def reverse_string(self, s: str) -> str:
         stack = list(s)  # push all characters
         reversed_list = []
 

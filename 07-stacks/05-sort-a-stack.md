@@ -1,14 +1,16 @@
 ---
 title: Sort a Stack
-difficulty: 🟢 Easy
+difficulty: Medium
+leetcode_title: Insertion Sort List
+leetcode: https://leetcode.com/problems/insertion-sort-list/
 tags:
-  - Stack
+  - Linked List
   - Sorting
 ---
 
 # Sort a Stack
 
-## Problem Description
+## Problem description
 
 Given a stack, sort it using only stack operations (`push` and `pop`).
 
@@ -40,6 +42,22 @@ Output: [-5, -1, 10, 20]
         (20 on top)
 ```
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+You cannot index into a stack, so the usual sorting algorithms are unavailable. You are allowed one helper stack.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Pop from the input and insert into the helper in the right place, moving elements back temporarily when they are in the way. That is insertion sort with stacks.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -51,19 +69,18 @@ Think of it as **insertion sort** using two stacks.
 ### Algorithm
 
 1. Pop an element from the input stack
-2. While the sorted stack's top is greater than this element:
-   - Move the top back to the input stack
+2. If the sorted stack's top is greater than this element, move the top back to the input stack and repeat
 3. Push the element onto the sorted stack
 4. Repeat until input is empty
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n^2)$ — each element may cause up to n moves
-- **Space Complexity:** $O(n)$ — auxiliary stack holds all elements
+- Time complexity: $O(n^2)$ — each element may cause up to n moves
+- Space complexity: $O(n)$ — auxiliary stack holds all elements
 
 ```python
 class Solution:
-    def sortStack(self, stack: List[int]) -> List[int]:
+    def sort_stack(self, stack: List[int]) -> List[int]:
         result = []
 
         while stack:
