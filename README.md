@@ -16,7 +16,10 @@ Each pattern directory holds a `README.md` explaining the pattern itself, a `PRO
 | 05  | [Cyclic Sort](./05-cyclic-sort/README.md)                                               | 8        |
 | 06  | [In-Place Reversal of a Linked List](./06-in-place-reversal-of-a-linked-list/README.md) | 7        |
 | 07  | [Stacks](./07-stacks/README.md)                                                         | 7        |
-| 15  | [Two Heaps](./15-two-heaps/README.md)                                                   | 2        |
+| 08  | [Monotonic Stack](./08-monotonic-stack/README.md)                                       | 8        |
+| 13  | [Matrix Traversal](./13-matrix-traversal/README.md)                                     | 5        |
+| 14  | [Two Heaps](./14-two-heaps/README.md)                                                   | 4        |
+| 29  | [Prefix Sum](./29-prefix-sum/README.md)                                                 | 7        |
 
 ## Problem lists
 

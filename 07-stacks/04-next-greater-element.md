@@ -113,7 +113,7 @@ class Solution:
 
         for num in reversed(nums2):
             # Pop smaller elements, they can't be "next greater" for anything to the left
-            while stack and stack[-1] <= num:
+            while stack and num >= stack[-1]:
                 stack.pop()
 
             if stack:
