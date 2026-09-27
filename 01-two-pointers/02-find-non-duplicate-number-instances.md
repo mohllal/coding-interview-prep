@@ -1,17 +1,18 @@
 ---
-title: Remove Duplicates from Sorted Array
-difficulty: 🟢 Easy
+title: Find Non-Duplicate Number Instances
+difficulty: Easy
+leetcode_title: Remove Duplicates from Sorted Array
+leetcode: https://leetcode.com/problems/remove-duplicates-from-sorted-array/
 tags:
   - Array
   - Two Pointers
-url: https://leetcode.com/problems/remove-duplicates-from-sorted-array/
 ---
 
-# Remove Duplicates from Sorted Array
+# Find Non-Duplicate Number Instances
 
-## Problem Description
+## Problem description
 
-Given an integer array `nums` sorted in **non-decreasing order**, remove the duplicates **in-place** such that each unique element appears only **once**. The **relative order** of the elements should be kept the **same**.
+Given an integer array `nums` sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The **relative order** of the elements should be kept the **same**.
 
 Consider the number of unique elements in `nums` to be `k`. After removing duplicates, return the number of unique elements `k`.
 
@@ -39,7 +40,23 @@ Explanation: Your function should return k = 5, with the first five elements of 
 
 - `1 <= nums.length <= 3 * 10^4`
 - `-100 <= nums[i] <= 100`
-- `nums` is sorted in **non-decreasing** order.
+- `nums` is sorted in non-decreasing order.
+
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+The array is sorted, so duplicates are already adjacent. You never have to look further than the previous kept value.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Keep a write pointer for where the next unique value belongs and a read pointer that scans ahead. They advance at different rates, which is the whole trick.
+
+</details>
 
 ## Solution
 
@@ -47,92 +64,59 @@ Explanation: Your function should return k = 5, with the first five elements of 
 
 Since the array is sorted, duplicates are always adjacent. We use two pointers:
 
-- `next_non_duplicate`: tracks where to place the next unique element
-- `i`: scans through the array looking for new unique values
+- `write`: the position where the next unique element will be placed
+- `read`: scans forward through the array
+
+`read` starts at 1 and compares each element to its immediate predecessor. Because the array is sorted, `nums[read] != nums[read - 1]` is exactly the condition for finding a new unique value — no look-back further than one step is ever needed.
+
+```plaintext
+arr = [1, 1, 2, 2, 3]
+
+  [1, 1, 2, 2, 3]
+      WR                      write=1, read=1
+
+  read=1:  1 == 1  →  duplicate, advance read
+  [1, 1, 2, 2, 3]
+      W  R
+
+  read=2:  2 != 1  →  unique, copy to write slot, advance both
+  [1, 2, 2, 2, 3]
+         W  R
+
+  read=3:  2 == 2  →  duplicate, advance read
+  [1, 2, 2, 2, 3]
+         W     R
+
+  read=4:  3 != 2  →  unique, copy to write slot, write advances
+  [1, 2, 3, _, _]
+            W                 done (read off end)
+
+  return write = 3
+```
 
 ### Algorithm
 
-1. Initialize `next_non_duplicate = 1` (first element is always unique)
-2. Iterate `i` from `0` to `n-1`:
-   - If `nums[i] != nums[next_non_duplicate - 1]`:
-     - Copy `nums[i]` to `nums[next_non_duplicate]`
-     - Increment `next_non_duplicate`
-3. Return `next_non_duplicate` as the count of unique elements
+1. Start `write = 1` (index 0 is always kept)
+2. Iterate `read` from `1` to `n - 1`:
+   - If `nums[read] != nums[read - 1]`, a new unique value was found:
+     - Write it to `nums[write]`
+     - Advance `write`
+3. Return `write` — the count of unique elements, and the length of the valid prefix
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ — Single pass through the array.
-- **Space Complexity:** $O(1)$ — In-place modification with two pointers.
-
-```python
-class Solution:
-    def removeDuplicates(self, nums: List[int]) -> int:
-        next_non_duplicate = 1
-        i = 0
-
-        while i < len(nums):
-            if nums[i] != nums[next_non_duplicate - 1]:
-                nums[next_non_duplicate] = nums[i]
-                next_non_duplicate += 1
-
-            i += 1
-
-        return next_non_duplicate
-```
-
----
-
-# Similar Problem: [Remove Element](https://leetcode.com/problems/remove-element/)
-
-## Problem Description
-
-Given an integer array `nums` and an integer `val`, remove all occurrences of `val` in-place and return the new length.
-
-## Examples
-
-**Example 1:**
-
-```plaintext
-Input: nums = [3,2,2,3], val = 3
-Output: 2, nums = [2,2,_,_]
-```
-
-**Example 2:**
-
-```plaintext
-Input: nums = [0,1,2,2,3,0,4,2], val = 2
-Output: 5, nums = [0,1,4,0,3,_,_,_]
-```
-
-## Solution
-
-### Intuition
-
-Similar to removing duplicates, but instead of comparing adjacent elements, we compare each element against the target value `val`.
-
-### Algorithm
-
-1. Initialize `next_non_val = 0` to track where to place non-val elements
-2. Iterate through the array:
-   - If `nums[i] != val`: copy it to `nums[next_non_val]` and increment
-3. Return `next_non_val`
-
-### Complexity Analysis
-
-- **Time Complexity:** $O(n)$ — Single pass through the array.
-- **Space Complexity:** $O(1)$ — In-place modification.
+- Time complexity: $O(n)$ — Single pass through the array.
+- Space complexity: $O(1)$ — In-place modification with two pointers.
 
 ```python
 class Solution:
-    def removeElement(self, nums: List[int], val: int) -> int:
-        next_non_val = 0
-        i = 0
-
-        while i < len(nums):
-            if nums[i] != val:
-                nums[next_non_val] = nums[i]
-                next_non_val += 1
-            i += 1
-
-        return next_non_val
+    def remove_duplicates(self, nums: List[int]) -> int:
+        write = 1
+    
+        for read in range(1, len(nums)):
+            if nums[read] != nums[read - 1]:
+                nums[write] = nums[read]
+                write += 1
+                
+        return write
 ```

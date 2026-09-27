@@ -1,16 +1,17 @@
 ---
-title: 3Sum Closest
-difficulty: 🟡 Medium
+title: Triplet Sum Close to Target
+difficulty: Medium
+leetcode_title: 3Sum Closest
+leetcode: https://leetcode.com/problems/3sum-closest/
 tags:
   - Array
   - Two Pointers
   - Sorting
-url: https://leetcode.com/problems/3sum-closest/
 ---
 
-# 3Sum Closest
+# Triplet Sum Close to Target
 
-## Problem Description
+## Problem description
 
 Given an integer array `nums` of length `n` and an integer `target`, find three integers in `nums` such that the sum is closest to `target`.
 
@@ -42,6 +43,22 @@ Explanation: The sum that is closest to the target is 0. (0 + 0 + 0 = 0).
 - `-1000 <= nums[i] <= 1000`
 - `-10^4 <= target <= 10^4`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Same shape as finding a triplet that sums to zero, but nothing has to match exactly — you are minimising a distance instead.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Track the best difference seen so far. The sign of `current_sum - target` still tells you which pointer to move, exactly as if you were searching for an exact hit.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -58,7 +75,7 @@ When two sums have the same distance, prefer the smaller sum.
 
 ### Algorithm
 
-1. **Sort** the array
+1. Sort the array
 2. Initialize `closest_sum` with infinity distance
 3. For each index `i`:
    - Use two pointers (`left`, `right`) to find pairs
@@ -66,39 +83,38 @@ When two sums have the same distance, prefer the smaller sum.
    - Move pointers based on whether current sum is less or greater than target
 4. Return `closest_sum`
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n^2)$ — Sorting plus nested two-pointer search.
-- **Space Complexity:** $O(1)$ — Only constant extra space (excluding sorting).
+- Time complexity: $O(n^2)$ — Sorting plus nested two-pointer search.
+- Space complexity: $O(1)$ — Only constant extra space (excluding sorting).
 
 ```python
 class Solution:
-    def threeSumClosest(self, nums: List[int], target: int) -> int:
+    def three_sum_closest(self, nums: List[int], target: int) -> int:
         nums.sort()
-        closest_sum = float('inf')
+        n = len(nums)
 
-        for i in range(len(nums) - 2):
-            left = i + 1
-            right = len(nums) - 1
+        closest = nums[0] + nums[1] + nums[2]
+
+        for i in range(n - 2):
+            left, right = i + 1, n - 1
 
             while left < right:
-                current_sum = nums[i] + nums[left] + nums[right]
+                current = nums[i] + nums[left] + nums[right]
 
-                current_distance = abs(current_sum - target)
-                closest_distance = abs(closest_sum - target)
+                # Update the closest sum 
+                current_distance = abs(current - target)
+                closest_distance = abs(closest - target) 
 
-                current = (current_distance, current_sum)
-                closest = (closest_distance, closest_sum)
+                if current_distance < closest_distance:
+                    closest = current
 
-                if current < closest:
-                    closest_sum = current_sum
-
-                if current_sum == target:
-                    return current_sum
-                elif current_sum < target:
+                if current < target:
                     left += 1
-                else:
+                elif current > target:
                     right -= 1
+                else:
+                    return current  # exact match
 
-        return closest_sum
+        return closest
 ```

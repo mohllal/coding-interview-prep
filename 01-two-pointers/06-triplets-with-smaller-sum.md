@@ -1,17 +1,18 @@
 ---
-title: 3Sum Smaller
-difficulty: 🟡 Medium
+title: Triplets with Smaller Sum
+difficulty: Medium
+leetcode_title: 3Sum Smaller
+leetcode: https://leetcode.com/problems/3sum-smaller/
 tags:
   - Array
   - Two Pointers
   - Binary Search
   - Sorting
-url: https://leetcode.com/problems/3sum-smaller/
 ---
 
-# 3Sum Smaller
+# Triplets with Smaller Sum
 
-## Problem Description
+## Problem description
 
 Given an array of `n` integers `nums` and an integer `target`, find the number of index triplets `i`, `j`, `k` with `0 <= i < j < k < n` that satisfy the condition `nums[i] + nums[j] + nums[k] < target`.
 
@@ -48,6 +49,22 @@ Output: 0
 - `-100 <= nums[i] <= 100`
 - `-100 <= target <= 100`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+When you find `nums[i] + nums[left] + nums[right] < target`, that is not one triplet — it is several at once.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Every index between `left` and `right` would also work with that same `left`, because the array is sorted and those values are no larger. So you can count `right - left` triplets in one step.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -58,7 +75,7 @@ Key insight: In a sorted array, if `nums[i] + nums[left] + nums[right] < target`
 
 ### Algorithm
 
-1. **Sort** the array
+1. Sort the array
 2. For each index `i`:
    - Early exit if `nums[i] >= target`
    - Count valid pairs using two pointers
@@ -68,100 +85,31 @@ Key insight: In a sorted array, if `nums[i] + nums[left] + nums[right] < target`
      - Increment `left`
 3. Return count
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n^2)$ — Sorting plus nested two-pointer traversal.
-- **Space Complexity:** $O(1)$ — Only constant extra space (excluding sorting).
-
-```python
-class Solution:
-    def searchPair(self, nums: List[int], target: int, left: int) -> int:
-        count = 0
-        right = len(nums) - 1
-
-        while left < right:
-            current = nums[left] + nums[right]
-
-            if current >= target:
-                right -= 1
-            else:
-                # Since `nums[right] >= nums[left]`, we can replace `nums[right]` by any 
-                # number between left and right to get a sum less than the target
-                count += (right - left)
-                left += 1
-        
-        return count
-
-    def threeSumSmaller(self, nums: List[int], target: int) -> int:
-        nums.sort()
-        count = 0
-
-        for i in range(len(nums)):
-            if nums[i] >= target:
-                break
-            
-            count += self.searchPair(nums, target - nums[i], i + 1)
-        
-        return count
-```
-
----
-
-# Similar Problem: 3Sum Smaller Triplets
-
-## Problem Description
-
-Given an array of `n` integers `nums` and an integer `target`, find the triplets `[nums[i], nums[j], nums[k]]` with `0 <= i < j < k < n` that satisfy the condition `nums[i] + nums[j] + nums[k] < target`.
-
-## Solution
-
-### Algorithm
-
-Instead of counting, we record all valid triplets by iterating from `right` down to `left` when a valid sum is found.
-
-### Complexity Analysis
-
-- **Time Complexity:** $O(n^2)$ — In the worst case, we enumerate all triplets.
-- **Space Complexity:** $O(n^2)$ — For storing all valid triplets.
-
-### Why space complexity is $O(n^2)$?
-
-When including the output, the result list has **$O(n^2)$** space complexity because of the number of valid triplets it may store.
-
-- The algorithm itself uses only constant extra space (two pointers and loop variables).
-- For each fixed index `i` (**$O(n)$** choices), there can be up to **$O(n)$** valid `(left, right)` pairs.
-- Each valid pair produces a distinct triplet that must be stored.
-
-Therefore, the total number of stored triplets in the worst case is:
-
-$O(n) \times O(n) = O(n^2)$
+- Time complexity: $O(n^2)$ — Sorting plus nested two-pointer traversal.
+- Space complexity: $O(1)$ — Only constant extra space (excluding sorting).
 
 ```python
 class Solution:
-    def searchPair(self, nums: List[int], target: int, left: int, first: int, triplets: List[List[int]]) -> None:
-        right = len(nums) - 1
-
-        while left < right:
-            current = nums[left] + nums[right]
-
-            if current >= target:
-                right -= 1
-            else:
-                # Record all valid triplets with current left
-                for k in range(right, left, -1):
-                    triplets.append([first, nums[left], nums[k]])
-
-                left += 1
-
-    def threeSumSmaller(self, nums: List[int], target: int) -> List[List[int]]:
+    def three_sum_smaller(self, nums: List[int], target: int) -> int:
         nums.sort()
-        triplets = []
+        n = len(nums)
+        count = 0
 
-        for i in range(len(nums)):
-            if nums[i] >= target:
-                break
-            
-            self.searchPair(nums, target - nums[i], i + 1, nums[i], triplets)
-        
-        return triplets
+        for i in range(n - 2):
+            left, right = i + 1, n - 1
+
+            while left < right:
+                current = nums[i] + nums[left] + nums[right]
+
+                if current < target:
+                    # Since `nums[right] >= nums[left]`, we can replace `nums[right]` by any 
+                    # number between left and right to get a sum less than the target
+                    count += right - left
+                    left += 1
+                else:
+                    right -= 1
+
+        return count
 ```

@@ -1,6 +1,8 @@
 ---
-title: Shortest Unsorted Continuous Subarray
-difficulty: 🟡 Medium
+title: Minimum Window Sort
+difficulty: Medium
+leetcode_title: Shortest Unsorted Continuous Subarray
+leetcode: https://leetcode.com/problems/shortest-unsorted-continuous-subarray/
 tags:
   - Array
   - Two Pointers
@@ -8,12 +10,11 @@ tags:
   - Greedy
   - Sorting
   - Monotonic Stack
-url: https://leetcode.com/problems/shortest-unsorted-continuous-subarray/
 ---
 
-# Shortest Unsorted Continuous Subarray
+# Minimum Window Sort
 
-## Problem Description
+## Problem description
 
 Given an integer array `nums`, you need to find one **continuous subarray** such that if you only sort this subarray in non-decreasing order, then the whole array will be sorted in non-decreasing order.
 
@@ -50,14 +51,30 @@ Output: 0
 
 **Follow up:** Can you solve it in `O(n)` time complexity?
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Sorting a copy and comparing gives the answer in $O(n \log n)$. To do better, find the two boundaries directly.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Scan inward from both ends to find the first out-of-order element on each side. Then widen the window to swallow any value outside it that falls inside the window's min and max.
+
+</details>
+
 ## Solution
 
 ### Intuition
 
 Finding the first out-of-order elements from both ends gives us a candidate subarray. But this might not be enough — we need to extend the subarray to include:
 
-- Any element **before** the subarray that's greater than the subarray's minimum
-- Any element **after** the subarray that's less than the subarray's maximum
+- Any element before the subarray that's greater than the subarray's minimum
+- Any element after the subarray that's less than the subarray's maximum
 
 ### Algorithm
 
@@ -69,14 +86,14 @@ Finding the first out-of-order elements from both ends gives us a candidate suba
 6. Extend `right` rightward while `nums[right+1] < max`
 7. Return `right - left + 1`
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ — Multiple linear passes.
-- **Space Complexity:** $O(1)$ — Only pointers and min/max values.
+- Time complexity: $O(n)$ — Multiple linear passes.
+- Space complexity: $O(1)$ — Only pointers and min/max values.
 
 ```python
 class Solution:
-    def findUnsortedSubarrayWindow(self, nums: List[int]) -> Tuple[int, int]:
+    def find_unsorted_subarray_window(self, nums: List[int]) -> Tuple[int, int]:
         # Find first index from the left where order breaks
         left = 0
         while left < len(nums) - 1 and nums[left] <= nums[left + 1]:
@@ -89,42 +106,24 @@ class Solution:
 
         return left, right
 
-    def minimumInSubarray(self, nums: List[int], left: int, right: int) -> int:
-        minimum = nums[left]
-        for i in range(left + 1, right + 1):
-            minimum = min(nums[i], minimum)
-        
-        return minimum
-
-    def maximumInSubarray(self, nums: List[int], left: int, right: int) -> int:
-        maximum = nums[left]
-        for i in range(left + 1, right + 1):
-            maximum = max(nums[i], maximum)
-        
-        return maximum
-
-    def findUnsortedSubarray(self, nums: List[int]) -> int:
-        left, right = self.findUnsortedSubarrayWindow(nums)
+    def find_unsorted_subarray(self, nums: List[int]) -> int:
+        left, right = self.find_unsorted_subarray_window(nums)
 
         # If the array is already sorted
         if left >= right:
             return 0
 
         # Find min and max inside the initial unsorted window
-        minimum = self.minimumInSubarray(nums, left, right)
-        maximum = self.maximumInSubarray(nums, left, right)
+        minimum = min(nums[left:right + 1])
+        maximum = max(nums[left:right + 1])
 
-        # Expand left boundary:
-        # If an element before the window is greater than the minimum inside it,
-        # that element would move right after sorting, so it must be included.
+        # Expand left boundary to find true start: first element before the window that is greater than the minimum inside it
         while left > 0 and nums[left - 1] > minimum:
             left -= 1
 
-        # Expand right boundary:
-        # If an element after the window is smaller than the maximum inside it,
-        # that element would move left after sorting, so it must be included.
+        # Expand right boundary to find true end: first element after the window that is smaller than the maximum inside it,
         while right < len(nums) - 1 and nums[right + 1] < maximum:
             right += 1
 
-        return right - left + 1
+        return end - start + 1
 ```

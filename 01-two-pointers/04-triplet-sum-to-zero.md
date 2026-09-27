@@ -1,16 +1,17 @@
 ---
-title: 3Sum
-difficulty: 🟡 Medium
+title: Triplet Sum to Zero
+difficulty: Medium
+leetcode_title: 3Sum
+leetcode: https://leetcode.com/problems/3sum/
 tags:
   - Array
   - Two Pointers
   - Sorting
-url: https://leetcode.com/problems/3sum/
 ---
 
-# 3Sum
+# Triplet Sum to Zero
 
-## Problem Description
+## Problem description
 
 Given an integer array `nums`, return all the triplets `[nums[i], nums[j], nums[k]]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
 
@@ -51,6 +52,22 @@ Explanation: The only possible triplet sums up to 0.
 - `3 <= nums.length <= 3000`
 - `-10^5 <= nums[i] <= 10^5`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Fix one number and the problem becomes: find two numbers in the rest that sum to a known target. You have already solved that one.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Sort first, so the inner search can be two converging pointers. Then think hard about how to avoid emitting the same triplet twice.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -59,7 +76,7 @@ Reduce the 3Sum problem to multiple 2Sum problems. For each element `X`, find pa
 
 ### Algorithm
 
-1. **Sort** the array
+1. Sort the array
 2. For each index `i`:
    - Skip if `nums[i] == nums[i-1]` (avoid duplicate triplets)
    - Set `target = -nums[i]`
@@ -69,45 +86,46 @@ Reduce the 3Sum problem to multiple 2Sum problems. For each element `X`, find pa
      - Skip duplicate values for both pointers
 3. Return all triplets
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n^2)$ — Sorting is $O(n \log n)$, then for each element we do a linear scan.
-- **Space Complexity:** $O(n)$ — For sorting (depending on implementation) and storing results.
+- Time complexity: $O(n^2)$ — Sorting is $O(n \log n)$, then for each element we do a linear scan.
+- Space complexity: $O(n)$ — For sorting (depending on implementation) and storing results.
 
 ```python
 class Solution:
-    def searchPair(self, nums: List[int], target: int, left: int, triplets: List[List[int]]) -> None:
-        right = len(nums) - 1
-
-        while left < right:
-            current = nums[left] + nums[right]
-
-            if current == target:
-                triplets.append([-target, nums[left], nums[right]])
-
-                # Skip duplicate values for left pointer
-                left += 1
-                while left < right and nums[left] == nums[left - 1]:
-                    left += 1
-                
-                # Skip duplicate values for right pointer
-                right -= 1
-                while left < right and nums[right] == nums[right + 1]:
-                    right -= 1
-            elif current < target:
-                left += 1
-            else:
-                right -= 1
-    
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
+    def three_sum(self, nums: List[int]) -> List[List[int]]:
         nums.sort()
-
         triplets = []
-        for i in range(len(nums)):
+
+        n = len(nums)
+
+        for i in range(n - 2):
+            # Skip duplicate first elements
             if i > 0 and nums[i] == nums[i - 1]:
                 continue
-            
-            self.searchPair(nums, -nums[i], i + 1, triplets)
+
+            left, right = i + 1, n - 1
+
+            while left < right:
+                total = nums[i] + nums[left] + nums[right]
+
+                if total < 0:
+                    left += 1
+                elif total > 0:
+                    right -= 1
+                else:
+                    triplets.append([nums[i], nums[left], nums[right]])
+
+                    # Skip duplicates for left pointer
+                    while left < right and nums[left] == nums[left + 1]:
+                        left += 1
+
+                    # Skip duplicates for right pointer
+                    while left < right and nums[right] == nums[right - 1]:
+                        right -= 1
+
+                    left += 1
+                    right -= 1
 
         return triplets
 ```

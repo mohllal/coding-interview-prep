@@ -1,18 +1,19 @@
 ---
-title: Squares of a Sorted Array
-difficulty: 🟢 Easy
+title: Squaring a Sorted Array
+difficulty: Easy
+leetcode_title: Squares of a Sorted Array
+leetcode: https://leetcode.com/problems/squares-of-a-sorted-array/
 tags:
   - Array
   - Two Pointers
   - Sorting
-url: https://leetcode.com/problems/squares-of-a-sorted-array/
 ---
 
-# Squares of a Sorted Array
+# Squaring a Sorted Array
 
-## Problem Description
+## Problem description
 
-Given an integer array `nums` sorted in **non-decreasing** order, return an array of **the squares of each number** sorted in non-decreasing order.
+Given an integer array `nums` sorted in non-decreasing order, return an array of **the squares of each number** sorted in non-decreasing order.
 
 ## Examples
 
@@ -36,9 +37,25 @@ Output: [4,9,9,49,121]
 
 - `1 <= nums.length <= 10^4`
 - `-10^4 <= nums[i] <= 10^4`
-- `nums` is sorted in **non-decreasing** order.
+- `nums` is sorted in non-decreasing order.
 
 **Follow up:** Squaring each element and sorting the new array is very trivial, could you find an $O(n)$ solution using a different approach?
+
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Squaring destroys the sorted order, because a large negative becomes a large positive. Where in the array do the *biggest* squares live?
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+At the two ends. Compare the magnitudes at each end and fill the output from the back forwards.
+
+</details>
 
 ## Solution
 
@@ -58,26 +75,32 @@ By using two pointers from both ends, we can build the result array from largest
    - Move the corresponding pointer inward
 4. Reverse `squares` to get ascending order
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ — Single pass with two pointers, plus $O(n)$ for reverse.
-- **Space Complexity:** $O(n)$ — For the result array.
+- Time complexity: $O(n)$ — Single pass with two pointers, plus $O(n)$ for reverse.
+- Space complexity: $O(n)$ — For the result array.
 
 ```python
 class Solution:
-    def sortedSquares(self, nums: List[int]) -> List[int]:
-        squares = []
+    def sorted_squares(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        squares = [0] * n
 
-        left = 0
-        right = len(nums) - 1
+        left, right = 0, n - 1
+        pos = n - 1
+
         while left <= right:
-            if abs(nums[left]) >= abs(nums[right]):
-                squares.append(nums[left] ** 2)
+            left_sq = nums[left] * nums[left]
+            right_sq = nums[right] * nums[right]
+
+            if left_sq > right_sq:
+                squares[pos] = left_sq
                 left += 1
             else:
-                squares.append(nums[right] ** 2)
+                squares[pos] = right_sq
                 right -= 1
-        
-        squares.reverse()
+
+            pos -= 1
+
         return squares
 ```
