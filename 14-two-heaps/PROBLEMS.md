@@ -2,7 +2,7 @@
 
 ## If I'm in a hurry
 
-Both problems are worth doing; the first is the pattern, the second is what makes it hard.
+Both problems are worth doing: the first is the pattern, the second is what makes it hard.
 
 | #  | Problem                                                                          | Why this one                                  | Difficulty |
 |----|----------------------------------------------------------------------------------|-----------------------------------------------|------------|
@@ -11,8 +11,11 @@ Both problems are worth doing; the first is the pattern, the second is what make
 
 ## All problems
 
+Problems marked *(unsolved)* have the statement but no solution yet.
+
 | #  | Problem                                                                          | Variant                           | Difficulty |
 |----|----------------------------------------------------------------------------------|-----------------------------------|------------|
 | 01 | [Find the Median of a Number Stream](./01-find-the-median-of-a-number-stream.md) | Insert-only stream                | Hard       |
 | 02 | [Sliding Window Median](./02-sliding-window-median.md)                           | Insert and remove (lazy deletion) | Hard       |
-| 05 | [Kth Smallest Number](./05-kth-smallest-number.md)                               | Max-heap of size K                | Medium     |
+| 03 | [Maximize Capital](./03-maximize-capital.md) *(unsolved)*                        | Greedy selection with two heaps   | Hard       |
+| 04 | [Next Interval](./04-next-interval.md) *(unsolved)*                              | Next match query with two heaps   | Medium     |

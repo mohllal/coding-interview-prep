@@ -99,7 +99,7 @@ Why always push to `low` first: the ordering check then has a non-empty `low` to
 ## Reach for something else when
 
 - The data is static and you need one median: a quickselect gives $O(n)$ on average with no structure to maintain.
-- You need the `k` largest overall rather than something in the middle: a single heap of size `k` is enough.
+- You need the `k` largest overall rather than something in the middle: a single heap of size `k` is enough — see the [Top K Elements](../18-top-k-elements/README.md) pattern.
 - You need arbitrary rank queries or ordered iteration: an order-statistic tree or balanced BST does what two heaps cannot.
 - You need the maximum or minimum of a sliding window rather than its median: a monotonic deque is $O(1)$ amortised and far simpler.
 
