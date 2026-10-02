@@ -12,6 +12,8 @@ Three problems that cover the full arc: building the stack habit, the core next-
 
 ## All problems
 
+Problems marked *(unsolved)* have the statement but no solution yet.
+
 | #  | Problem                                                                                            | Variant                                   | Difficulty |
 |----|----------------------------------------------------------------------------------------------------|-------------------------------------------|------------|
 | 01 | [Remove Nodes From Linked List](./01-remove-nodes-from-linked-list.md)                             | Monotonic stack on a linked list          | Medium     |
@@ -20,3 +22,4 @@ Three problems that cover the full arc: building the stack habit, the core next-
 | 04 | [Daily Temperatures](./04-daily-temperatures.md)                                                   | Next greater index (days to wait)         | Medium     |
 | 05 | [Remove All Adjacent Duplicates in String II](./05-remove-all-adjacent-duplicates-in-string-ii.md) | Stack tracking (char, count) pairs        | Medium     |
 | 06 | [Sum of Subarray Minimums](./06-sum-of-subarray-minimums.md)                                       | Count subarrays where each element is min | Medium     |
+| 07 | [Remove K Digits](./07-remove-k-digits.md) *(unsolved)*                                            | Greedy digit removal via monotonic stack  | Medium     |

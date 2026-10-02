@@ -50,7 +50,7 @@ Explanation: Each day is followed immediately by a warmer one, except the last.
 <details>
 <summary>Hint 1</summary>
 
-This is the same "next greater element" pattern as [Next Greater Element](./03-Next%20Greater%20Element.md), but you need the *distance* to the next warmer day, not the temperature itself. What should you store on the stack — values or indices?
+This is the same "next greater element" pattern as [Next Greater Element](./03-next-greater-element.md), but you need the *distance* to the next warmer day, not the temperature itself. What should you store on the stack — values or indices?
 
 </details>
 
