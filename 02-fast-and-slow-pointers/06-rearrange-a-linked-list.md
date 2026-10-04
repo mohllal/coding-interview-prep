@@ -1,17 +1,18 @@
 ---
-title: Reorder List
-difficulty: 🟡 Medium
+title: Rearrange a Linked List
+difficulty: Medium
+leetcode_title: Reorder List
+leetcode: https://leetcode.com/problems/reorder-list/
 tags:
   - Linked List
   - Two Pointers
   - Stack
   - Recursion
-url: https://leetcode.com/problems/reorder-list/
 ---
 
-# Reorder List
+# Rearrange a Linked List
 
-## Problem Description
+## Problem description
 
 Given the head of a singly linked list, reorder it to: `L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → ...`
 
@@ -50,6 +51,22 @@ Output: [1,5,2,4,3]
 - The number of nodes in the list is in the range `[1, 5 * 10^4]`.
 - `1 <= Node.val <= 1000`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+The target order alternates between the front of the list and the back. Walking backwards is exactly what a singly linked list cannot do.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+So make it possible: split at the middle, reverse the second half, then weave the two halves together one node at a time.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -62,23 +79,76 @@ This problem combines three linked list operations:
 
 This is similar to [Palindrome Linked List](./05-palindrome-linked-list.md) but instead of comparing, we're merging.
 
+Odd and even lengths need no special handling: the reversal starts at the middle node, so both halves end on that **same** node.
+
+**Odd length:**
+
 ```plaintext
-Original:     1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ 5 ──▶ null
-Split:        1 ──▶ 2                  |    3 ──▶ 4 ──▶ 5 ──▶ null
-Reverse 2nd:  1 ──▶ 2 ──▶ 3 ──▶ null   |    5 ──▶ 4 ──▶ 3 ──▶ null
-Merge:        1 ──▶ 5 ──▶ 2 ──▶ 4 ──▶ 3 ──▶ null
+1. Find the middle — slow stops on the center node
+
+   1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ 5 ──▶ null
+               ▲
+             middle
+
+2. Reverse from the middle onward — the middle node is shared by both halves
+
+   head                     reversed head
+    │                             │
+    ▼                             ▼
+    1 ──▶ 2 ──▶ 3 ◀── 4 ◀──────── 5
+                │
+                ▼
+               null
+
+3. Weave: front walks in from the head, back walks in from the reversed head
+
+   step   front   back   relink        list so far
+   1        1       5    1 → 5 → 2     1 → 5 → 2
+   2        2       4    2 → 4 → 3     1 → 5 → 2 → 4 → 3
+   stop     3       3    back is on the shared middle — already the tail
+
+   1 ──▶ 5 ──▶ 2 ──▶ 4 ──▶ 3 ──▶ null
+```
+
+**Even length:**
+
+```plaintext
+1. Find the middle — slow stops on the second of the two middle nodes
+
+   1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ null
+               ▲
+             middle
+
+2. Reverse from the middle onward — the middle node is shared by both halves
+
+   head               reversed head
+    │                       │
+    ▼                       ▼
+    1 ──▶ 2 ──▶ 3 ◀──────── 4
+                │
+                ▼
+               null
+
+3. Weave: front walks in from the head, back walks in from the reversed head
+
+   step   front   back   relink        list so far
+   1        1       4    1 → 4 → 2     1 → 4 → 2
+   stop     2       3    back is on the shared middle — 2 → 3 is already in place
+
+   1 ──▶ 4 ──▶ 2 ──▶ 3 ──▶ null
 ```
 
 ### Algorithm
 
-1. Find the middle node using slow/fast pointers
-2. Reverse the second half of the list
-3. Merge the two halves by alternating nodes
+1. Find the middle node using slow/fast pointers.
+2. Reverse the list from the middle onward.
+3. Weave the halves: walk `front` from the head and `back` from the reversed head, linking `front → back → front.next` each step.
+4. Stop when `back` reaches the shared middle node (`back.next is None`).
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ - Three linear passes (find middle, reverse, merge)
-- **Space Complexity:** $O(1)$ - Only pointer manipulations, no extra storage
+- Time complexity: $O(n)$ - Three linear passes (find middle, reverse, merge)
+- Space complexity: $O(1)$ - Only pointer manipulations, no extra storage
 
 ```python
 class ListNode:
@@ -87,7 +157,7 @@ class ListNode:
         self.next = next
 
 class Solution:
-    def getMiddleNode(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def get_middle_node(self, head: Optional[ListNode]) -> Optional[ListNode]:
         slow = head
         fast = head
 
@@ -97,7 +167,7 @@ class Solution:
 
         return slow
 
-    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def reverse_list(self, head: Optional[ListNode]) -> Optional[ListNode]:
         previous_node = None
         current_node = head
 
@@ -110,25 +180,34 @@ class Solution:
 
         return previous_node
 
-    def reorderList(self, head: Optional[ListNode]) -> None:
-        if not head or not head.next:
-            return head
+    def reorder_list(self, head: Optional[ListNode]) -> None:
+        if head is None or head.next is None:
+            return
 
-        middle = self.getMiddleNode(head)
-        second_half = self.reverseList(middle)
+        middle = self.get_middle_node(head)
+        reversed_head = self.reverse_list(middle)
 
-        first = head
-        second = second_half
+        front = head
+        back = reversed_head
 
-        while second.next is not None:
-            first_next = first.next
-            second_next = second.next
+        # stop on the shared middle node: it's already in place as the tail
+        while back.next is not None:
+            front_next = front.next
+            back_next = back.next
 
-            first.next = second
-            second.next = first_next
+            front.next = back
+            back.next = front_next
 
-            first = first_next
-            second = second_next
-        
-        return head
+            front = front_next
+            back = back_next
 ```
+
+Why `back.next is not None` and not `back is not None`? The shared middle node is already in its final place as the tail. Running one more step would try to weave it in after itself. On an even length that sets `middle.next = middle`, a cycle:
+
+```plaintext
+1 ──▶ 4 ──▶ 2 ──▶ 3 ──┐      with `while back is not None`
+                  ▲   │
+                  └───┘
+```
+
+`front` never needs a check of its own: the first half is always at least as long as the reversed half, so `back` runs out first.
