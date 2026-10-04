@@ -1,15 +1,16 @@
 ---
-title: Reverse Nodes in k-Group
-difficulty: 🔴 Hard
+title: Reverse Every K-element Sub-List
+difficulty: Hard
+leetcode_title: Reverse Nodes in k-Group
+leetcode: https://leetcode.com/problems/reverse-nodes-in-k-group/
 tags:
   - Linked List
   - Recursion
-url: https://leetcode.com/problems/reverse-nodes-in-k-group/
 ---
 
-# Reverse Nodes in k-Group
+# Reverse Every K-element Sub-List
 
-## Problem Description
+## Problem description
 
 Given the `head` of a linked list, reverse the nodes of the list `k` at a time, and return the modified list.
 
@@ -39,36 +40,73 @@ Output: [3,2,1,4,5]
 - `1 <= k <= n <= 5000`
 - `0 <= Node.val <= 1000`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Reverse one group of `k`, then repeat. The difficulty is connecting each reversed group to the one before and after it.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+After reversing a group, its original head becomes its tail — and that tail is what must point at the next group. Keep it as the previous-group pointer for the following round.
+
+</details>
+
 ## Solution
 
 ### Intuition
 
 This problem applies the [sub-list reversal technique](./02-reverse-a-sub-list.md) repeatedly for each group of `k` nodes.
 
-For each group of `k` nodes, we reverse it and connect it to the previous group's tail. The key insight is that after reversing a group, the original first node becomes the tail—we save this to connect the next reversed group.
+For each group of `k` nodes, we reverse it and connect it to the previous group's tail. After reversing, the original first node of the group becomes its tail — save it as `prev_group_tail` so the next reversed group can attach to it.
 
 ```plaintext
-Original:   1 ────────▶ 2 ────────▶ 3 ────────▶ 4 ────────▶ 5  (k=2)
-            └──group 1──┘           └──group 2──┘
+[1,2,3,4,5], k=2
 
-After:      2 ──▶ 1 ──▶ 4 ──▶ 3 ──▶ 5
-                  │     ▲
-                  └─────┘ (prev_group_tail connects to next group's new head)
+Round 1 — reverse group [1,2], seed prev = after_group = 3:
+
+  iter 1   1.next = 3     prev=1, curr=2
+  iter 2   2.next = 1     prev=2, curr=3
+
+  new_head = 2,  prev_group_tail = 1 (original first node, now the tail)
+
+  state:   2 ──▶ 1 ──▶ 3 ──▶ 4 ──▶ 5
+                 ▲
+           prev_group_tail
+
+Round 2 — reverse group [3,4], seed prev = after_group = 5:
+
+  iter 1   3.next = 5     prev=3, curr=4
+  iter 2   4.next = 3     prev=4, curr=5
+
+  connect: prev_group_tail (1) .next = prev (4)
+  prev_group_tail = 3
+
+  state:   2 ──▶ 1 ──▶ 4 ──▶ 3 ──▶ 5
+                           ▲
+                     prev_group_tail
+
+Round 3 — only 1 node left (5), count < k=2 → stop, leave as-is
+
+Final:   2 ──▶ 1 ──▶ 4 ──▶ 3 ──▶ 5
 ```
 
 ### Algorithm
 
 1. For each potential group, scan ahead to check if `k` nodes exist
-2. If fewer than `k` nodes remain, break (they stay unchanged)
-3. Reverse the group: start `prev` at `after_group`, reverse `k` nodes
-4. Connect: if not the first group, link `prev_group_tail.next` to `prev` (new head of reversed group)
-5. Update `prev_group_tail` to the original start (now the tail)
-6. Move to the next group starting at `after_group`
+2. If fewer than `k` nodes remain, stop — they stay unchanged
+3. Reverse the group: seed `prev = after_group`, iterate `k` times
+4. Connect to the previous group's tail
+5. Save the original group start (now its tail) and advance to the next group
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ - each node is visited twice (once for counting, once for reversing)
-- **Space Complexity:** $O(1)$ - only using a constant number of pointers
+- Time complexity: $O(n)$ — each node is visited twice (once in the scan, once in the reversal)
+- Space complexity: $O(1)$ — only a constant number of pointers
 
 ```python
 class ListNode:
@@ -77,45 +115,48 @@ class ListNode:
         self.next = next
 
 class Solution:
-    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+    def reverse_k_group(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         if head is None or k == 1:
             return head
 
-        current_head = head
+        curr = head
         prev_group_tail = None
-        new_head = head
-        while True:
-            # Check if there are k nodes available
-            scan = current_head
-            count = 0
-            while scan is not None and count < k:
-                scan = scan.next
-                count += 1
+        new_head = None
 
-            if count < k:
-                break  # remaining nodes stay as-is
+        while curr is not None:
+            group_start = curr
+            after_group = self._get_group_end(curr, k)
 
-            after_group = scan          # node after the current kth group
-            group_start = current_head  # first node in the current kth group
+            if after_group is None:
+                break  # fewer than k nodes remain — partial tail stays as-is
 
-            # Reverse the current group
-            prev = after_group
-            curr = group_start
-            for _ in range(k):
-                next_node = curr.next
-                curr.next = prev
-    
-                prev = curr
-                curr = next_node
-            
-            # Connect with the previous group
+            new_group_head = self._reverse(group_start, after_group, k)
+
             if prev_group_tail is not None:
-                prev_group_tail.next = prev
+                prev_group_tail.next = new_group_head
             else:
-                new_head = prev  # first reversed group sets new head
+                new_head = new_group_head
 
-            prev_group_tail = group_start
-            current_head = after_group
+            prev_group_tail = group_start  # original start is now the tail
+            curr = after_group
 
         return new_head
+
+    def _get_group_end(self, start: ListNode, k: int) -> Optional[ListNode]:
+        node = start
+        for _ in range(k):
+            if node is None:
+                return None  # fewer than k nodes available
+            node = node.next
+        return node  # node right after the k-th element
+
+    def _reverse(self, left: ListNode, after_right: Optional[ListNode], k: int) -> ListNode:
+        prev = after_right
+        curr = left
+        for _ in range(k):
+            next_node = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next_node
+        return prev  # new head of the reversed group
 ```

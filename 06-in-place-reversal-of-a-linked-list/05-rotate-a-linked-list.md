@@ -1,15 +1,16 @@
 ---
-title: Rotate List
-difficulty: 🟡 Medium
+title: Rotate a Linked List
+difficulty: Medium
+leetcode_title: Rotate List
+leetcode: https://leetcode.com/problems/rotate-list/
 tags:
   - Linked List
   - Two Pointers
-url: https://leetcode.com/problems/rotate-list/
 ---
 
-# Rotate List
+# Rotate a Linked List
 
-## Problem Description
+## Problem description
 
 Given the `head` of a linked list, rotate the list to the right by `k` places.
 
@@ -41,6 +42,22 @@ k = 4 % 3 = 1 (effective rotation)
 - `-100 <= Node.val <= 100`
 - `0 <= k <= 2 * 10⁹`
 
+## Hints
+
+<details>
+<summary>Hint 1</summary>
+
+Rotating by the list's length changes nothing, so a huge `k` is not a problem — reduce it first.
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Connecting the tail to the head makes a ring. Then the whole task is choosing where to break it, which is a fixed number of steps from the head.
+
+</details>
+
 ## Solution
 
 ### Intuition
@@ -50,13 +67,29 @@ Rotating right by `k` means taking the last `k` nodes and moving them to the fro
 The problem reduces to: find the cut point at position `length - k`, break the list there, and rewire the tail to point to the original head.
 
 ```plaintext
-Original:   1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ 5,  k = 2
-                       ↑           ↑
-                   new_tail      tail
+[1,2,3,4,5], k=2
 
-After:      4 ──▶ 5 ──▶ 1 ──▶ 2 ──▶ 3 ──▶ null
-            ↑           ↑           ↑
-         new_head   (tail.next)  new_tail.next = null
+Step 1 — traverse to find length and tail:
+
+  1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ 5 ──▶ null
+                              ▲
+                           tail (length=5)
+
+Step 2 — effective rotations: k % length = 2 % 5 = 2
+          new_tail is at position length - rotations = 5 - 2 = 3
+
+  1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ 5 ──▶ null
+              ▲              ▲
+           new_tail         tail
+
+Step 3 — cut and rewire:
+          new_head = new_tail.next = 4
+          new_tail.next = null
+          tail.next = head (old head, node 1)
+
+  4 ──▶ 5 ──▶ 1 ──▶ 2 ──▶ 3 ──▶ null
+  ▲                        ▲
+new_head                new_tail
 ```
 
 ### Algorithm
@@ -68,10 +101,10 @@ After:      4 ──▶ 5 ──▶ 1 ──▶ 2 ──▶ 3 ──▶ null
 5. Rewire: `new_tail.next = null`, `tail.next = head`
 6. Return `new_head`
 
-### Complexity Analysis
+### Complexity analysis
 
-- **Time Complexity:** $O(n)$ - two passes at most (count + find cut point)
-- **Space Complexity:** $O(1)$ - only using a few pointers
+- Time complexity: $O(n)$ - two passes at most (count + find cut point)
+- Space complexity: $O(1)$ - only using a few pointers
 
 ```python
 class ListNode:
@@ -80,32 +113,35 @@ class ListNode:
         self.next = next
 
 class Solution:
-    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        if head is None or k == 0:
+    def rotate_right(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        if head is None or head.next is None or k == 0:
             return head
 
-        # Find length and tail
-        length = 1
-        tail = head
-        while tail.next:
-            tail = tail.next
-            length += 1
-        
+        length, tail = self._count_and_find_tail(head)
+
         rotations = k % length
         if rotations == 0:
             return head
 
-        # Find new tail (node before the cut point)
-        steps_to_new_head = length - rotations
-        new_tail = head
-        for _ in range(steps_to_new_head - 1):
-            new_tail = new_tail.next
-        
+        new_tail = self._advance(head, length - rotations - 1)
         new_head = new_tail.next
 
-        # Rewire pointers
         new_tail.next = None
         tail.next = head
 
         return new_head
+
+    def _count_and_find_tail(self, head: ListNode) -> tuple[int, ListNode]:
+        length = 1
+        node = head
+        while node.next is not None:
+            node = node.next
+            length += 1
+        return length, node
+
+    def _advance(self, start: ListNode, steps: int) -> ListNode:
+        node = start
+        for _ in range(steps):
+            node = node.next
+        return node
 ```
