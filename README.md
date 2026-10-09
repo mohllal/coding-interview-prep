@@ -1,14 +1,14 @@
-# Coding Interview Prep
+# Coding Interview Preparation
 
-My preparation for coding interviews: notes, explanations and Python solutions organized by problem-solving pattern.
+My preparation for coding interviews: notes, explanations and Python solutions organized by coding pattern.
 
-The structure follows Design Gurus's [Grokking the Coding Interview: Patterns for Coding Questions](https://www.designgurus.io/course/grokking-the-coding-interview) course. Pattern names, problem titles and their order match the course, and each problem also links to its closest LeetCode equivalent. A few extra problems that don't fit any single pattern live under [Miscellaneous](./33-miscellaneous/README.md).
+The structure follows Design Gurus's [Grokking the Coding Interview: Patterns for Coding Questions](https://www.designgurus.io/course/grokking-the-coding-interview) course.
 
-Each pattern directory contains:
+Inside each pattern folder:
 
-- a `README.md` explaining the pattern: the core idea, a template, its variations, and the pitfalls to watch for
-- a `PROBLEMS.md` listing its problems, with a short set to revise when time is tight
-- one file per problem with the statement, examples, an explanation and a solution: problems marked *(unsolved)* have only the statement, to attempt cold
+- `README.md`: summarizes the pattern, including its key idea, general approach, common variations, and typical pitfalls.
+- `PROBLEMS.md`: lists the pattern problems, highlighting must-review problems for quick practice.
+- Individual files, one for each problem.
 
 ## Patterns
 
@@ -36,3 +36,7 @@ Each pattern directory contains:
 - [Grind 75 List](https://leetcode.com/problem-list/ar2s2fi2/)
 - [Grind 169 List](https://leetcode.com/problem-list/ar244hmv/)
 - [NeetCode 150](https://leetcode.com/problem-list/ar21vm0r/)
+
+## Contributing
+
+This repository reflects personal learning and interview preparation. It is primarily for personal use, but suggestions and improvements are welcome through issues and pull requests
