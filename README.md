@@ -1,5 +1,11 @@
 # Coding Interview Preparation
 
+> [!NOTE]
+> This is part of my personal interview prep. I also have separate repos for:
+>
+> - [High-level design](https://github.com/mohllal/high-level-design-interview-prep)
+> - [Low-level design](https://github.com/mohllal/low-level-design-interview-prep)
+
 My preparation for coding interviews: notes, explanations and Python solutions organized by coding pattern.
 
 The structure follows Design Gurus's [Grokking the Coding Interview: Patterns for Coding Questions](https://www.designgurus.io/course/grokking-the-coding-interview) course.
