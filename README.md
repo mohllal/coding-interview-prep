@@ -29,7 +29,9 @@ Inside each pattern folder:
 | 06  | [In-Place Reversal of a Linked List](./06-in-place-reversal-of-a-linked-list/README.md) | 7        |
 | 07  | [Stacks](./07-stacks/README.md)                                                         | 7        |
 | 08  | [Monotonic Stack](./08-monotonic-stack/README.md)                                       | 7        |
+| 09  | [Hash Maps](./09-hash-maps/README.md)                                                   | 5        |
 | 10  | [Tree Level Order Traversal](./10-tree-level-order-traversal/README.md)                 | 14       |
+| 11  | [Tree Depth First Search](./11-tree-depth-first-search/README.md)                       | 7        |
 | 13  | [Matrix Traversal](./13-matrix-traversal/README.md)                                     | 5        |
 | 14  | [Two Heaps](./14-two-heaps/README.md)                                                   | 4        |
 | 18  | [Top K Elements](./18-top-k-elements/README.md)                                         | 1        |
