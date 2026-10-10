@@ -29,7 +29,7 @@ The stack holds *indices* (not values) so that after a pop you can both read the
 
 ## Templates
 
-**Monotonic decreasing stack** — the stack stays largest-to-smallest (top is the smallest so far). An element is pushed only after popping everything smaller than it. Use when you need the *next greater* element, or when later larger values "dominate" earlier smaller ones.
+**Monotonic decreasing stack:** the stack stays largest-to-smallest (top is the smallest so far). An element is pushed only after popping everything smaller than it. Use when you need the *next greater* element, or when later larger values "dominate" earlier smaller ones.
 
 ```plaintext
 stack ← empty
@@ -47,7 +47,7 @@ while stack is not empty:
     process(pop stack)
 ```
 
-**Monotonic increasing stack** — the stack stays smallest-to-largest (top is the largest so far). An element is pushed only after popping everything larger than it. Use when you need the *next smaller* element, or when later smaller values dominate earlier larger ones.
+**Monotonic increasing stack:** the stack stays smallest-to-largest (top is the largest so far). An element is pushed only after popping everything larger than it. Use when you need the *next smaller* element, or when later smaller values dominate earlier larger ones.
 
 ```plaintext
 stack ← empty
@@ -120,17 +120,17 @@ for digit in num:
 
 ## Recognize it when
 
-- You are scanning left-to-right and an element "answers" or "invalidates" earlier elements — the pop gives you the answer for what was parked.
+- You are scanning left-to-right and an element "answers" or "invalidates" earlier elements: the pop gives you the answer for what was parked.
 - You need the *nearest* greater or smaller element in $O(n)$ (brute force is $O(n^2)$).
 - The problem asks for a sum or count over all subarrays, and you suspect each element's contribution can be computed from its expansion boundaries.
-- You are building a result string or sequence by cancelling adjacent items — the stack *is* the result.
-- You need to greedily remove elements to minimise or maximise a sequence — each removal decision uses the current element vs. the stack top.
+- You are building a result string or sequence by cancelling adjacent items: the stack *is* the result.
+- You need to greedily remove elements to minimise or maximise a sequence: each removal decision uses the current element vs. the stack top.
 
 ## Reach for something else when
 
-- You need the maximum or minimum *inside* a sliding window — a monotonic deque (double-ended queue) handles additions and removals from both ends, which a stack cannot.
-- You need the globally best parked element, not the most recently parked — that is a heap.
-- Elements are answered by the first *oldest* (not newest) parked item — that is a queue, not a stack.
+- You need the maximum or minimum *inside* a sliding window: a monotonic deque (double-ended queue) handles additions and removals from both ends, which a stack cannot.
+- You need the globally best parked element, not the most recently parked: that is a heap.
+- Elements are answered by the first *oldest* (not newest) parked item: that is a queue, not a stack.
 
 ## Pitfalls
 

@@ -166,7 +166,7 @@ Common shapes to look out for:
 
 - Three pointers — `prev`, `curr`, `next_node` — are enough to reverse any linked list in $O(1)$ space.
 - Start partial reversals with `prev = after_right`: the right end of the reversed segment auto-connects to the rest of the list.
-- After reversing a group, its original head is now its tail — save it as `prev_group_tail` to connect the next reversed group.
+- After reversing a group, its original head is now its tail: save it as `prev_group_tail` to connect the next reversed group.
 - Rotation is a cut-and-rewire: find position `length - k`, break there, and point the old tail at the old head.
 
 ## Problems

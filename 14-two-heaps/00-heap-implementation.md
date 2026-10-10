@@ -2,8 +2,8 @@
 
 A heap is a **complete binary tree** (every level is fully filled except possibly the last, which fills left to right) that satisfies the **heap property**:
 
-- **Max-heap** — every node is ≥ all of its descendants. The root holds the maximum.
-- **Min-heap** — every node is ≤ all of its descendants. The root holds the minimum.
+- **Max-heap:** every node is ≥ all of its descendants. The root holds the maximum.
+- **Min-heap:** every node is ≤ all of its descendants. The root holds the minimum.
 
 > The heap property only constrains a node relative to its **own** subtree, not relative to nodes in other subtrees. A node's left child may be larger or smaller than its right child — that's fine.
 

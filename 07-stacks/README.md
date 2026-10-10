@@ -10,9 +10,9 @@ The last element pushed is the first element popped. Think of a stack of plates:
 
 That single constraint is what makes a stack the right tool for three recurring shapes of problem:
 
-- Matching pairs — push openers, pop when you find closers
-- Reversal — push in order, pop in reverse order
-- Backtracking — push state, pop to undo
+- Matching pairs: push openers, pop when you find closers
+- Reversal: push in order, pop in reverse order
+- Backtracking: push state, pop to undo
 
 Every operation is $O(1)$:
 
@@ -75,11 +75,11 @@ Three knobs change the question being answered: flipping `<` to `>` finds the ne
 
 ## Recognize it when
 
-- The most recently seen unresolved thing is the first one that will be resolved. This is the real signal, and it is about the problem's resolution order rather than a preference for a data structure. When the *oldest* unresolved thing resolves first, you want a queue instead — that single question separates the two.
-- An element cannot be answered until you reach some later element. Park it and carry on; because the nearest parked item is always the first to be satisfied, the parked items are a stack by construction. "Next greater element" is exactly this shape.
-- Items already parked hold an order you would have to destroy to insert badly. If a new element invalidates some of them, popping until the order is restored keeps the stack monotonic, and the push-once-pop-once argument keeps the scan linear.
-- The input nests, and the natural solution is recursive, but you want to control the memory. A stack is the call stack written out by hand — same structure, no recursion limit, and you can inspect it.
-- Only the most recent state matters when undoing. Path navigation and backtracking qualify; anything needing the *best* parked item rather than the *latest* wants a heap.
+- The most recently seen unresolved thing is the first one that will be resolved: this is the real signal, and it is about the problem's resolution order rather than a preference for a data structure. When the *oldest* unresolved thing resolves first, you want a queue instead — that single question separates the two.
+- An element cannot be answered until you reach some later element: Park it and carry on and because the nearest parked item is always the first to be satisfied, the parked items are a stack by construction. "Next greater element" is exactly this shape.
+- Items already parked hold an order you would have to destroy to insert badly: if a new element invalidates some of them, popping until the order is restored keeps the stack monotonic, and the push-once-pop-once argument keeps the scan linear.
+- The input nests, and the natural solution is recursive, but you want to control the memory: a stack is the call stack written out by hand — same structure, no recursion limit, and you can inspect it.
+- Only the most recent state matters when undoing: path navigation and backtracking qualify; anything needing the *best* parked item rather than the *latest* wants a heap.
 
 ## Problems
 

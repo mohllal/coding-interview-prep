@@ -69,14 +69,14 @@ return -1
 
 ## Reach for something else when
 
-- Order matters and you need the *k*-th largest — use a heap.
-- You need range queries over indices — use prefix sums.
-- The problem is about a contiguous subarray satisfying some condition — consider sliding window.
-- The array is sorted and you're looking for a pair — converging two pointers fits better.
+- Order matters and you need the *k*-th largest: use a heap.
+- You need range queries over indices: use prefix sums.
+- The problem is about a contiguous subarray satisfying some condition: consider sliding window.
+- The array is sorted and you're looking for a pair: converging two pointers fits better.
 
 ## Pitfalls
 
-- `Counter` returns `0` for missing keys, but a plain `dict` raises `KeyError` on missing access — use `.get(key, 0)` with plain dicts.
+- `Counter` returns `0` for missing keys, but a plain `dict` raises `KeyError` on missing access: use `.get(key, 0)` with plain dicts.
 - Double-counting: some characters need to appear multiple times per "use" (e.g. 'l' and 'o' in "balloon") — use `//` not just presence.
 - Off-by-one in palindrome construction: remember that at most one odd-count character goes in the center, not one per character with an odd count.
 

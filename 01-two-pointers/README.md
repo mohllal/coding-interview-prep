@@ -98,7 +98,7 @@ Use it when:
 
 ## Templates
 
-**Converging pointers** — start at opposite ends, move inward based on a comparison:
+**Converging pointers:** start at opposite ends, move inward based on a comparison:
 
 ```plaintext
 left ← 0
@@ -114,7 +114,7 @@ while left < right:
         right ← right - 1
 ```
 
-**Fast–slow pointers** — both start at the same end; `slow` is the write head, `fast` is the read head:
+**Fast–slow pointers:** both start at the same end; `slow` is the write head, `fast` is the read head:
 
 ```plaintext
 slow ← 0
@@ -127,7 +127,7 @@ for fast from 0 to len(arr) - 1:
 # arr[0..slow) is the result; slow is the new length
 ```
 
-**Anchored + converging** — outer loop fixes one element, inner two-pointer scan handles the rest:
+**Anchored + converging:** outer loop fixes one element, inner two-pointer scan handles the rest:
 
 ```plaintext
 sort arr

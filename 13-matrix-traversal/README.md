@@ -149,7 +149,7 @@ Both traversals visit the same nodes and cost the same. Choose depth-first for b
 - Marking a node visited after recursing rather than before. Two neighbours both step into the same unmarked node and the depth-first search never bottoms out.
 - In breadth-first search, marking on dequeue instead of on enqueue. The same node gets pushed by every neighbour that sees it, which still terminates but multiplies the queue size and the work.
 - Indexing before bounds-checking. `grid[r][c]` with a negative `r` silently wraps around to the other end of the grid in Python rather than raising, so the bug surfaces as a wrong answer rather than a crash.
-- Recursion depth. A `300` × `300` grid of solid land is `90,000` nested frames against Python's default limit of `1000` — reach for the iterative breadth-first search template rather than raising the limit.
+- Recursion depth. A `300` × `300` grid of solid land is `90,000` nested frames against Python's default limit of `1000`: reach for the iterative breadth-first search template rather than raising the limit.
 - In Flood Fill, forgetting the case where the new color already equals the starting color. The recoloring is then invisible to the visited guard, so nothing ever looks visited and the traversal does not terminate.
 - Including diagonals when the problem says horizontally and vertically only, which silently merges regions that should stay separate.
 

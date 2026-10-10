@@ -175,7 +175,7 @@ Which value to store follows from what you are measuring:
 - Off-by-one in the formula. `sum(i, j)` = `prefix[j+1] - prefix[i]`, where `j` is inclusive. A one-off produces wrong answers with no error.
 - Storing the last occurrence instead of the first when searching for the longest subarray (or vice versa for shortest).
 - Negative modular arithmetic. Python's `%` always returns non-negative, so `(-1) % 3 == 2`. In other languages, normalize with `((r % k) + k) % k`.
-- Reaching for a sliding window on an array with negatives. The window sum is not decreasing with negatives — use prefix sums instead.
+- Reaching for a sliding window on an array with negatives. The window sum is not decreasing with negatives: use prefix sums instead.
 
 ## Key takeaways
 

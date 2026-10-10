@@ -70,7 +70,7 @@ When a pointer moving two steps at a time reaches the end, a pointer moving one 
 
 Since fast moves twice as fast as slow, when fast reaches the end, slow has traveled exactly half the distance—placing it at the middle. For even-length lists, the loop condition `fast.next is not None` ensures slow lands on the second middle node.
 
-**Odd length** — fast stops on the last node:
+**Odd length:** fast stops on the last node:
 
 ```plaintext
 1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ 5 ──▶ null
@@ -83,7 +83,7 @@ iteration 2    3      5      fast.next is null → stop
 slow = 3
 ```
 
-**Even length** — fast steps past the last node to `null`:
+**Even length:** fast steps past the last node to `null`:
 
 ```plaintext
 1 ──▶ 2 ──▶ 3 ──▶ 4 ──▶ 5 ──▶ 6 ──▶ null

@@ -172,7 +172,7 @@ The rest of the logic is split into four helpers:
 - `get_median` prunes any ghost roots and reads the answer
 - `_rebalance` moves one element between the halves when the sizes drift
 
-**Routing** — which half does an element belong in? Compare `num` against `−low[0]` (the max of `low`), exactly as Solution 1 does. But `low[0]` might be a ghost: a stale value left over from a previous eviction that no longer represents the real boundary. Routing against a ghost can misplace a new element and break the ordering invariant. The fix is to prune `low`'s root before routing, so `−low[0]` is always the real max.
+**Routing:** which half does an element belong in? Compare `num` against `−low[0]` (the max of `low`), exactly as Solution 1 does. But `low[0]` might be a ghost: a stale value left over from a previous eviction that no longer represents the real boundary. Routing against a ghost can misplace a new element and break the ordering invariant. The fix is to prune `low`'s root before routing, so `−low[0]` is always the real max.
 
 Eviction uses exactly the same routing logic as insertion: mark the ghost first, prune `low`'s root, then compare `num` against the real max of `low`. This works for the same reason — the ordering invariant says every real element of `low` is ≤ real max of `low` and every real element of `high` is > real max of `low`, so the comparison always routes to the correct half.
 
