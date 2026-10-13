@@ -114,7 +114,7 @@ class TreeNode:
 
 
 class Solution:
-    def findPaths(self, root: Optional[TreeNode], target_sum: int) -> List[List[int]]:
+    def find_paths(self, root: Optional[TreeNode], target_sum: int) -> List[List[int]]:
         result: List[List[int]] = []
         self._dfs(root, target_sum, [], result)
         return result
@@ -162,7 +162,7 @@ class TreeNode:
 
 
 class Solution:
-    def findPaths(self, root: Optional[TreeNode], target_sum: int) -> List[List[int]]:
+    def find_paths(self, root: Optional[TreeNode], target_sum: int) -> List[List[int]]:
         result: List[List[int]] = []
         if root is None:
             return result

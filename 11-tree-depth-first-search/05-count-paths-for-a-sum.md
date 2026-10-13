@@ -125,7 +125,7 @@ class TreeNode:
 
 
 class Solution:
-    def countPaths(self, root: Optional[TreeNode], target_sum: int) -> int:
+    def count_paths(self, root: Optional[TreeNode], target_sum: int) -> int:
         count: defaultdict[int, int] = defaultdict(int)
         count[0] = 1
         return self._dfs(root, target_sum, 0, count)

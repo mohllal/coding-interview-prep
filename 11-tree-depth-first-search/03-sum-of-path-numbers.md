@@ -125,7 +125,7 @@ class TreeNode:
 
 
 class Solution:
-    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+    def sum_numbers(self, root: Optional[TreeNode]) -> int:
         return self._dfs(root, 0)
 
     def _dfs(self, node: Optional[TreeNode], current_number: int) -> int:

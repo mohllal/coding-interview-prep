@@ -129,7 +129,7 @@ class TreeNode:
 
 
 class Solution:
-    def findMaximumPathSum(self, root: Optional[TreeNode]) -> int:
+    def find_maximum_path_sum(self, root: Optional[TreeNode]) -> int:
         self.max_sum = float("-inf")
         self._max_arm(root)
         return self.max_sum

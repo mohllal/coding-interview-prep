@@ -118,7 +118,7 @@ class TreeNode:
 
 
 class Solution:
-    def hasPath(self, root: Optional[TreeNode], target_sum: int) -> bool:
+    def has_path(self, root: Optional[TreeNode], target_sum: int) -> bool:
         if root is None:
             return False
 
@@ -153,7 +153,7 @@ class TreeNode:
 
 
 class Solution:
-    def hasPath(self, root: Optional[TreeNode], target_sum: int) -> bool:
+    def has_path(self, root: Optional[TreeNode], target_sum: int) -> bool:
         if root is None:
             return False
 

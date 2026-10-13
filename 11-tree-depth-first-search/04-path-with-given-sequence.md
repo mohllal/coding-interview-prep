@@ -120,7 +120,7 @@ class TreeNode:
 
 
 class Solution:
-    def findPath(self, root: Optional[TreeNode], sequence: List[int]) -> bool:
+    def find_path(self, root: Optional[TreeNode], sequence: List[int]) -> bool:
         return self._dfs(root, sequence, 0)
 
     def _dfs(self, node: Optional[TreeNode], sequence: List[int], index: int) -> bool:

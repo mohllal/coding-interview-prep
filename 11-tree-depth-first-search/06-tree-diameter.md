@@ -123,7 +123,7 @@ class TreeNode:
 
 
 class Solution:
-    def findDiameter(self, root: Optional[TreeNode]) -> int:
+    def find_diameter(self, root: Optional[TreeNode]) -> int:
         self.diameter = 0
         self._height(root)
         return self.diameter
@@ -186,7 +186,7 @@ class TreeNode:
 
 
 class Solution:
-    def findDiameter(self, root: Optional[TreeNode]) -> int:
+    def find_diameter(self, root: Optional[TreeNode]) -> int:
         self.diameter = 0
         self._dfs(root, 0)
         return self.diameter
