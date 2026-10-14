@@ -112,11 +112,9 @@ class Solution:
     def kth_smallest(self, nums: List[int], k: int) -> int:
         heap = []
 
-        # fill: push the first k elements unconditionally
         for i in range(k):
             heapq.heappush(heap, -nums[i])
 
-        # replace: if a later element is smaller than the current max, swap it in
         for i in range(k, len(nums)):
             if -nums[i] > heap[0]:  # nums[i] < heap max
                 heapq.heappop(heap)
