@@ -1,12 +1,26 @@
-# Problem: Minimum Meeting Rooms
+---
+title: Minimum Meeting Rooms
+difficulty: Medium
+leetcode_title: Meeting Rooms II
+leetcode: https://leetcode.com/problems/meeting-rooms-ii/
+tags:
+  - Array
+  - Two Pointers
+  - Greedy
+  - Sorting
+  - Heap (Priority Queue)
+  - Prefix Sum
+---
 
-LeetCode problem: [253. Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/).
+# Minimum Meeting Rooms
 
-Given a list of intervals representing the start and end time of ‘N’ meetings, find the minimum number of rooms required to hold all the meetings.
+## Problem description
+
+Given a list of intervals representing the start and end time of `n` meetings, find the minimum number of rooms required to hold all the meetings.
 
 ## Examples
 
-Example 1:
+**Example 1:**
 
 ```plaintext
 Meetings: [[1,4], [2,5], [7,9]]
@@ -14,7 +28,7 @@ Output: 2
 Explanation: Since [1,4] and [2,5] overlap, we need two rooms to hold these two meetings. [7,9] can occur in any of the two rooms later.
 ```
 
-Example 2:
+**Example 2:**
 
 ```plaintext
 Meetings: [[6,7], [2,4], [8,12]]
@@ -22,15 +36,15 @@ Output: 1
 Explanation: None of the meetings overlap, therefore we only need one room to hold all meetings.
 ```
 
-Example 3:
+**Example 3:**
 
 ```plaintext
 Meetings: [[1,4], [2,3], [3,6]]
-Output:2
+Output: 2
 Explanation: Since [1,4] overlaps with the other two meetings [2,3] and [3,6], we need two rooms to hold all the meetings.
 ```
 
-Example 4:
+**Example 4:**
 
 ```plaintext
 Meetings: [[4,5], [2,3], [2,4], [3,5]]
@@ -38,112 +52,147 @@ Output: 2
 Explanation: We will need one room for [2,3] and [3,5], and another room for [2,4] and [4,5].
 ```
 
-## Solution 1
+## Constraints
 
-Counting the number of overlapping intervals alone doesn't give us the correct number of rooms needed. Even if three intervals `x`, `y`, and `z` overlap, i.e. `x` overlaps with `y` and `y` overlaps with `z`, the condition `z.start >= x.end` implies that we can reuse the same room for intervals x and z. Thus, we only need 2 rooms, not 3, as `z` can be scheduled in the same room after `x` finishes.
+- `0 <= len(intervals) <= 10^4`
+- `0 <= start < end <= 10^6`
 
-For example, consider the intervals `[[2,3], [2,4], [3,5]]`.
+## Hints
 
-In this case, some meetings are mutually exclusive. For instance, `[2,3]` and `[3,5]` do not overlap, so they can be scheduled in the same room, even though all three intervals appear to overlap.
+<details>
+<summary>Hint 1</summary>
 
-To solve this problem accurately, we need to account for the mutual exclusivity of overlapping meetings:
+"How many intervals overlap somewhere" is not the answer. In `[[2,3], [2,4], [3,5]]` every interval touches another, yet two rooms suffice. What you actually need is the largest number overlapping *at a single instant*.
 
-1. Sort the meetings by their start times.
-2. Schedule the first meeting (let’s call it `m1`) in a room (`r1`).
-3. If the next meeting `m2` doesn't overlap with `m1`, it can be scheduled in the same room (`r1`).
-4. If `m2` and the next meeting `m3` overlap, we cannot use `r1` for `m3`. Instead, we schedule it in a new room (`r2`).
-5. For any subsequent meeting (say `m4`), if it overlaps with `m3`, we check if room `r1` is available by comparing the end times of the meetings already scheduled. If the end time of `m2` (in `r1`) is before the start time of `m4`, we can reuse `r1`. Otherwise, we need to schedule `m4` in another room (`r3`).
+</details>
 
-To efficiently manage this process, we need to track the end times of meetings currently in progress. A Min Heap is ideal for this, as it allows us to quickly find the meeting with the earliest end time, ensuring we can reuse rooms as soon as they become available.
+<details>
+<summary>Hint 2</summary>
 
-The algorithm follows these steps:
+Process the meetings in start order and keep the ones currently running. Before starting a new meeting you only care about one of them: the one finishing soonest. Which data structure hands you that in $O(\log n)$?
 
-1. Sort the meetings by their start times.
-2. Use a min-heap to track all ongoing meetings. The heap will help find the meeting with the earliest end time among those currently happening.
-3. Iterate through each meeting. For each meeting (let’s call it `m1`), it will attempt to schedule it.
-4. Remove all meetings from the heap that have ended before `m1` starts. This step ensures that only currently active meetings remain in the heap. Specifically, remove any meeting whose end time is less than or equal to the start time of `m1`.
-5. Add `m1` to the heap to represent it as an ongoing meeting.
-6. The heap now contains all the overlapping meetings. The size of the heap at any point represents the number of rooms required. Keep track of the largest heap size, as that will indicate the minimum number of rooms needed.
+</details>
 
-Complexity analysis:
+## Solution 1: min-heap of end times
 
-- Time complexity: O(N * LogN)
-- Space complexity: O(N)
+### Intuition
 
-Why time complexity is O(N * LogN)?
+Counting overlapping pairs overcounts. If `x` overlaps `y` and `y` overlaps `z`, but `z` starts after `x` ends, then `x` and `z` share a room and only two are needed — not three. The answer is the *peak concurrency*: the largest number of meetings alive at any single instant.
 
-Sorting the array of meetings takes O(N * LogN), where N is the number of meetings. Additionally, as we iterate through the meetings, we may need to push or pop elements from the min-heap (priority queue), and each of these operations takes O(LogN). Since we perform these operations for each meeting during the loop, the overall time complexity becomes O(N * LogN).
+```plaintext
+[[2,3], [2,4], [3,5]]
+
+            1   2   3   4   5   6
+[2,3]           ├───┤
+[2,4]           ├───────┤
+[3,5]               ├───────┤
+
+at t=2: 2 alive    at t=3: 2 alive ([2,4] and [3,5]; [2,3] has just ended)
+peak = 2, so 2 rooms
+```
+
+Walking the meetings in start order, the only thing you need to know before opening a new one is whether any running meeting has already finished — and for that, only the earliest end time matters. A min-heap of end times gives exactly that in $O(\log n)$, and its size is the number of rooms currently occupied.
+
+### Algorithm
+
+1. Sort the meetings by start time
+2. Keep a min-heap of the end times of meetings currently in progress
+3. For each meeting, pop every end time at or before its start — those rooms are free again
+4. Push this meeting's end time
+5. The heap size is the number of rooms in use right now; track the maximum
+
+### Complexity analysis
+
+- Time complexity: $O(n \log n)$ — the sort dominates. Each meeting is pushed and popped at most once and each heap operation is $O(\log n)$, so the scan is also $O(n \log n)$.
+- Space complexity: $O(n)$ — the heap holds at most one entry per meeting.
 
 ```python
 import heapq
+from typing import List
 
-def minMeetingRooms(intervals: List[List[int]]) -> bool:
-    intervals.sort(key=lambda interval: interval[0])
-    
-    rooms = 0
-    min_heap = [] # min heap which represents all ongoing meetings
-    for i in range(len(intervals)):
-        # remove all the meetings that have ended
-        while len(min_heap) > 0 and intervals[i][0] >= min_heap[0]:
-            heapq.heappop(min_heap)
-        
-        # push end date for the current meeting into the min heap
-        heapq.heappush(min_heap, intervals[i][1])
-        
-        # all ongoing meetings are in the min heap, so we need rooms for all of them
-        rooms = max(rooms, len(min_heap))
-        
-    return rooms
+
+class Solution:
+    def min_meeting_rooms(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key=lambda interval: interval[0])
+
+        rooms = 0
+        ongoing = []  # min-heap of end times of meetings in progress
+
+        for start, end in intervals:
+            # meetings that already finished release their rooms
+            while ongoing and ongoing[0] <= start:
+                heapq.heappop(ongoing)
+
+            heapq.heappush(ongoing, end)
+            rooms = max(rooms, len(ongoing))
+
+        return rooms
 ```
 
-## Solution 2
+## Solution 2: sweep line
 
-The algorithm revolves around identifying the start and end times of meetings, treating each of them as an event. If a meeting starts, it adds one more room. If a meeting ends, it frees up a room.
+### Intuition
 
-Let's take an example:
+The question is not "how do I assign meetings to rooms?" It is simpler: **at the busiest moment, how many meetings are happening at once?** That number is the answer.
+
+- You cannot do it with fewer — at the peak, every room is occupied and one meeting would have nowhere to go.
+- You can always do it with exactly that many — at every other moment, fewer meetings are running so rooms are available.
+
+Think of it like counting people in a building. Every person entering is `+1`, every person leaving is `-1`. The running total is "how many people are inside right now," and the peak of that total is the minimum size the building needs to be.
+
+Meetings work the same way. `+1` when a meeting starts (a room gets occupied), `-1` when it ends (a room is freed). The running total is "how many rooms are in use right now," and its peak is the answer.
 
 ```plaintext
-Intervals: [[1,5], [2,6], [4,8]]
+meetings: [[1,4], [2,5], [7,9]]
 
-Time: 1   2   3   4   5   6   7   8
-      [-- meeting 1 --]
-          [-- meeting 2 --]
-                  [-- meeting 3 --]
+  t=1  start  →  1 room in use
+  t=2  start  →  2 rooms in use  ← peak
+  t=4  end    →  1 room in use
+  t=5  end    →  0 rooms in use
+  t=7  start  →  1 room in use
+  t=9  end    →  0 rooms in use
+
+answer: 2
 ```
 
-At time 4, all three meetings overlap, which means we need 3 rooms at that moment.
+We only need to check the count at event boundaries. Between any two consecutive events the count is flat, so the peak can only occur right after a start — checking every timestamp in between would be redundant.
 
-The algorithm follows these steps:
+**Tie-breaking at equal timestamps:** when a meeting ends exactly as another begins at `t`, the end must be processed first so the room is freed before the new meeting needs it. Sorting on `(time, kind)` with `END = 0` and `START = 1` ensures this: `(t, 0)` sorts before `(t, 1)` automatically.
 
-1. Separate meeting start and end events:
-    1. Think of the start time as the moment we “need a room”.
-    2. The end time is when we “free up a room”.
-2. Sort events by time and if two events happen at the same time, it prioritizes the end event (free up a room before assigning a new one).
-3. As it progress through the timeline of these meetings, it tracks how many rooms are in use at every moment. Each time a meeting starts, it increases the room count by 1. Each time a meeting ends, it decreases the count by 1.
-4. Keep track of the maximum number of rooms needed at any point in time because it represents the peak number of simultaneous meetings.
+### Algorithm
 
-Complexity analysis:
+1. Emit two events per meeting: `(start, 1)` and `(end, 0)`
+2. Sort by `(time, kind)`, so that at equal times ends are processed before starts
+3. Sweep, adding one on a start and subtracting one on an end
+4. Track the highest count reached
 
-- Time complexity: O(N * LogN)
-- Space complexity: O(N)
+### Complexity analysis
+
+- Time complexity: $O(n \log n)$ — sorting `2n` events.
+- Space complexity: $O(n)$ — the event list.
 
 ```python
-def minMeetingRooms(intervals: List[List[int]]) -> bool:
-    events = []
-    for interval in intervals:
-        events.append([interval[0], 1])
-        events.append([interval[1], 0])
+from typing import List
 
-    events.sort(key=lambda event: event[0])
-    
-    rooms = 0
-    count = 0
-    for event in events:
-        if event[1] == 1:
-            count += 1
-        else:
-            count -= 1
-        rooms = max(rooms, count)
 
-    return rooms
+class Solution:
+    def min_meeting_rooms(self, intervals: List[List[int]]) -> int:
+        START, END = 1, 0
+
+        events = []
+        for start, end in intervals:
+            events.append((start, START))
+            events.append((end, END))
+
+        # sorting on (time, kind) puts an end before a start at the same timestamp,
+        # so a room can be handed straight over
+        events.sort()
+
+        rooms = 0
+        in_use = 0
+        for _, kind in events:
+            in_use += 1 if kind == START else -1
+            rooms = max(rooms, in_use)
+
+        return rooms
 ```
